@@ -1,2 +1,7 @@
-# Provisor/LNX
-Provisor/LNX: Edition-free_x86-64
+# Provisor/LNX: Edition-free_x86-64
+The main focus is the hybrid services systemata useage by additional redistributed software included.<br>
+Design, layout and structures of Provisor/LNX are for workstation/server/devel in direct/remote areas of technology usage.<br>
+<br>
+Technical Data:<br>
+Provisor/LNX: Edition-free_x86-64 is a GNU/KLinux AMD64 BSD-2Clause License Product offers direct/remote services for data/desktop usage+.<br>
+Its the long-arm to Provisor/OS and offers a wide range of applications/possibilities.<br>
