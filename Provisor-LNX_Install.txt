@@ -1,0 +1,69 @@
+User / Password:
+  root / linux
+  user / user
+
+
+Known bugs:
+Steam using with flatpak can freeze and/or reboot the machine. One solution which is successfull tested is rebuilding the kernel as "Low-latency Desktop with Timer Frequence of 1000Hz".
+
+
+Notice:
+The 30G+ Image of Provisor/LNX can boot in EFI or BIOS/Legacy mode. Not every hardware/firmware is technical functional with EFI-boot without a firmware entry (grub-install).
+
+
+Installation of Provisor/LNX on ZFS:
+************************************
+First, boot LNX from a 30G+ media.
+
+Create now the partitions, GPT table > EFI or BIOS-BOOT Partition > SWAP Partition > Linux Filesystem Partition
+If you use a EFI Partition format it fat16/32 > mkfs.vfat -F32 -n EFI /dev/<drive>          (e.g. /dev/sda1)
+then > mkswap -L SWAP /dev/<drive>                                                          (e.g. /dev/sda2)
+then > zpool create -f -o compatibility=grub2 -R /sysroot <ZFSPOOL-name> /dev/<drive>       (e.g. OS /dev/sda3)
+then > zfs set mountpoint=/ <ZFSPOOL-name>                                                  (e.g. OS)
+zfs create <ZFSPOOL-name>/boot
+zfs create <ZFSPOOL-name>/root
+zfs create <ZFSPOOL-name>/home
+zfs create <ZFSPOOL-name>/usr
+zfs create <ZFSPOOL-name>/var
+zfs create <ZFSPOOL-name>/opt
+zfs create <ZFSPOOL-name>/srv
+zfs create <ZFSPOOL-name>/tmp
+zfs create <ZFSPOOL-name>/usr/local
+zfs create <ZFSPOOL-name>/usr/local/src
+zfs create <ZFSPOOL-name>/usr/src
+zfs create <ZFSPOOL-name>/usr/srcs
+zfs create <ZFSPOOL-name>/usr/bins
+zfs create <ZFSPOOL-name>/var/lib
+zfs create <ZFSPOOL-name>/var/db
+zfs create <ZFSPOOL-name>/var/bins
+zfs create <ZFSPOOL-name>/var/local
+zfs create <ZFSPOOL-name>/srv/aio
+then if EFI Partition was created > "mkdir /sysroot/boot/efi && mount /dev/<drive> /sysroot/boot/efi"
+now >
+rsync -aAxXvH / /sysroot/
+rsync -aAxXvH /boot/ /sysroot/boot/
+rsync -aAxXvH /boot/efi/ /sysroot/boot/efi/
+rsync -aAxXvH /root/ /sysroot/root/
+rsync -aAxXvH /home/ /sysroot/home/
+rsync -aAxXvH /usr/ /sysroot/usr/
+rsync -aAxXvH /usr/local/ /sysroot/usr/local/
+rsync -aAxXvH /usr/src/ /sysroot/usr/src/
+rsync -aAxXvH /usr/srcs/ /sysroot/usr/srcs/
+rsync -aAxXvH /usr/bins/ /sysroot/usr/bins/
+rsync -aAxXvH /var/ /sysroot/var/
+rsync -aAxXvH /var/lib/ /sysroot/var/lib/
+rsync -aAxXvH /var/db/ /sysroot/var/db/
+rsync -aAxXvH /var/bins/ /sysroot/var/bins/
+rsync -aAxXvH /var/local/ /sysroot/var/local/
+rsync -aAxXvH /opt/ /sysroot/opt/
+now >
+mount -t proc /proc /sysroot/proc
+mount -o bind /dev /sysroot/dev
+mount -o bind /dev/pts /sysroot/dev/pts
+mount -o bind /sys /sysroot/sysroot
+mount -o bind /run /sysroot/run
+and if EFI > mount -o bind /sys/firmware/efi/efivars /sysroot/sys/firmware/efi/efivars
+now >
+cd /sysroot && chroot . /bin/bash
+then > Configure and install the system and install grub for EFI or BIOS.
+The Document continues next time..
